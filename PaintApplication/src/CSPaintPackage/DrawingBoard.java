@@ -12,6 +12,7 @@ public class DrawingBoard extends javax.swing.JPanel{
    java.awt.Graphics2D jpanelGraphics; //jpanel graphics. image is drawn on jpanel
    java.awt.Graphics2D graphicsPainter; //image graphics. lines, shapes & other things done directly on image by using image graphics
    java.awt.image.BufferedImage boardImage;
+   String boardImageType; //The board image type is the extension of the image (e.g jpg, png, gif)
    /*The most important instances are above */
    
    
@@ -34,12 +35,22 @@ public class DrawingBoard extends javax.swing.JPanel{
        java.awt.image.BufferedImage image  = null;
        try {
             image =  javax.imageio.ImageIO.read(new java.io.File(imageAbsolutePath));
+            this.boardImageType = getImageExtension(imageAbsolutePath);
        } catch (java.io.IOException ex) {
            throw new RuntimeException("The image was not found. provideImage(String imagePath) method. drawingBoard.java\n"
                    + "Abort immediately!!! Program has crashed because the image was not retrieved.");
        }
        
        return image;
+   }
+   
+   /**This method takes the path of an image and returns the extension of the image as a string **/
+   // The method should only be called by the provideImage method. It assumes that the string given is an image file path. 
+   
+   private String getImageExtension(String pathOfImage){
+       int start = pathOfImage.lastIndexOf(".");
+       String imageType = pathOfImage.substring(start + 1);
+       return imageType;
    }
    
    

@@ -231,7 +231,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
         java.io.File file = new java.io.File(imageAbsoluteStoragePath); //ideally this is supposed to 
         //be a directory
         try {
-            javax.imageio.ImageIO.write(drawingPanel.boardImage, "png", file);
+            javax.imageio.ImageIO.write(drawingPanel.boardImage, drawingPanel.boardImageType, file);
         } catch (java.io.IOException ex) {
             System.out.println("image could not be saved. line 59 drawingBoard.java");
         }
@@ -249,16 +249,9 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
         String newFileLocation = fileChooser.getCurrentDirectory().getAbsolutePath() + "\\";
 
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
-            String fileName = fileChooser.getSelectedFile().getName();
-            if (fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".gif")) {
-                System.out.println("image saved");
-            } else {
-                fileName = this.generateRandomFileName() + ".png";
-                javax.swing.JOptionPane.showMessageDialog(guiToEdit.frame, "The file name you chose was inapprorpriate. A correct one has been "
-                        + "made for you. The file is stored at  \"" + newFileLocation + fileName + "\".", "Notice", javax.swing.JOptionPane.OK_OPTION);
-              System.out.println("image saved");
-            }
-            saveImage(newFileLocation + fileName); //image file is saved here. 
+            String fileName = fileChooser.getSelectedFile().getName() + "." + drawingPanel.boardImageType;
+            saveImage(newFileLocation + fileName); //image file is saved here.
+       
             this.imageEdited = false; //since changes have been saved, we now say that the file has not been edited
 
         }
