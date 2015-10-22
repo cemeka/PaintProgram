@@ -1,0 +1,6 @@
+Comments for Paint Project
+
+-The program allows a user to draw simple lines, as well as irregular shapes and marks on a picture in any color of their choosing.  
+-The program has added functionality, the most preeminent of which is giving a client the ability to use a select tool.  
+
+For more information, please see release notes. 
