@@ -233,7 +233,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
         try {
             javax.imageio.ImageIO.write(drawingPanel.boardImage, drawingPanel.boardImageType, file);
         } catch (java.io.IOException ex) {
-            System.out.println("image could not be saved. line 59 drawingBoard.java");
+            System.out.println("image could not be saved. drawingBoard.java");
         }
     }
 
@@ -248,12 +248,12 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
         int returnVal = fileChooser.showSaveDialog(guiToEdit.frame);
         String newFileLocation = fileChooser.getCurrentDirectory().getAbsolutePath() + "\\";
 
-        if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
+        if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) { 
+            //the user must give a valid file name. The fileChooser ensures this. 
             String fileName = fileChooser.getSelectedFile().getName() + "." + drawingPanel.boardImageType;
             saveImage(newFileLocation + fileName); //image file is saved here.
-       
             this.imageEdited = false; //since changes have been saved, we now say that the file has not been edited
-
+            
         }
 
     }
@@ -558,7 +558,13 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
             System.exit(0);
         } else if (response == javax.swing.JOptionPane.YES_OPTION) {
             saveFileAs();
-            System.exit(0);
+            if (imageEdited == true){ //this means the image still hasn't still been saved
+                                      //continue to call the handleExitWhenFileNotSaved method recursively until either (1) user saves the file or (2)user 
+                                      //explicitly says they don't want to save the file. 
+               handleExitWhenFileNotSaved(message, messageBoxTitle); 
+            }
+             System.exit(0);
+            
         }
 
     }
