@@ -312,8 +312,16 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
         int height = drawingPanel.boardImage.getHeight();
 
         java.awt.Color previousColor = drawingPanel.graphicsPainter.getColor();
-
-        drawingPanel.drawingColor = this.selectColor();
+        
+        
+        java.awt.Color newColor = javax.swing.JColorChooser.showDialog(
+                guiToEdit.frame,
+                "Choose MultiPurpose Color",
+                guiToEdit.frame.getBackground());
+        if (newColor == null){
+            //do nothing
+        }else{
+        drawingPanel.drawingColor = newColor;
         //the drawing board automatically recognizes once this field has been set. 
         drawingPanel.graphicsPainter.setColor(drawingPanel.drawingColor);
         drawingPanel.graphicsPainter.fillRect(0, 0, width, height);
@@ -321,7 +329,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
 
         drawingPanel.drawingColor = previousColor; //this data in this field will be used the next time paintComponent() is 
         //called on a a drawing board
-
+    }
     }
 
     /**
