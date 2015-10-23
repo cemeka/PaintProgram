@@ -207,6 +207,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
 
             java.net.URL url = new java.net.URL(imagePosition);  //forming a new URL object with the online location of the image
             drawingPanel.boardImage = javax.imageio.ImageIO.read(url);
+            drawingPanel.boardImageInfo.boardImageType = drawingPanel.boardImageInfo.getImageExtension(imagePosition);
             drawingPanel.boardImageInfo.imageFromWeb = true; 
             guiToEdit.frame.validate(); //this makes sure the changes are loaded
 

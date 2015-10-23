@@ -35,7 +35,7 @@ public class DrawingBoard extends javax.swing.JPanel{
        try {
             image =  javax.imageio.ImageIO.read(new java.io.File(imageAbsolutePath));
             boardImageInfo.imagePath = imageAbsolutePath;
-            boardImageInfo.boardImageType = getImageExtension(imageAbsolutePath);
+            boardImageInfo.boardImageType = boardImageInfo.getImageExtension(imageAbsolutePath);
             boardImageInfo.imageFromWeb = false; //we set this to false because we know the image was gotten from a local directory, else this method wouldn't run. 
        } catch (java.io.IOException ex) {
            throw new RuntimeException("The image was not found. provideImage(String imagePath) method. drawingBoard.java\n"
@@ -48,11 +48,7 @@ public class DrawingBoard extends javax.swing.JPanel{
    /**This method takes the path of an image and returns the extension of the image as a string **/
    // The method should only be called by the provideImage method. It assumes that the string given is an image file path. 
    
-   private String getImageExtension(String pathOfImage){
-       int start = pathOfImage.lastIndexOf(".");
-       String imageType = pathOfImage.substring(start + 1);
-       return imageType;
-   }
+   
    
    
      /**References to the graphics object which is used for painting is gotten here. */ 

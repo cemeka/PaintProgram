@@ -20,4 +20,10 @@ public class ImageInfo {
           this.imagePath = location; 
           this.DEFAULT_IMAGE_LOCATION = location;
     }
+    
+    public String getImageExtension(String pathOfImage){
+       int start = pathOfImage.lastIndexOf(".");
+       String imageType = pathOfImage.substring(start + 1);
+       return imageType;
+   }
 }
