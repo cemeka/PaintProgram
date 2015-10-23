@@ -12,17 +12,16 @@ public class DrawingBoard extends javax.swing.JPanel{
    java.awt.Graphics2D jpanelGraphics; //jpanel graphics. image is drawn on jpanel
    java.awt.Graphics2D graphicsPainter; //image graphics. lines, shapes & other things done directly on image by using image graphics
    java.awt.image.BufferedImage boardImage;
-   String boardImageType; //The board image type is the extension of the image (e.g jpg, png, gif)
-   /*The most important instances are above */
-   
-   
+   ImageInfo boardImageInfo = new ImageInfo();
+  
+  
+  
    public java.awt.Color drawingColor = null;
    
    
    //(MUST GET REFERENCE TO BOARD IMAGE AND CHANGE IT DIRECTLY) 
    public DrawingBoard(){
-         String location = System.getProperty("user.dir") + "\\src\\CSPaintPackage\\";
-         boardImage = this.provideImage( location + "defaultImage.jpg"); //board image is set to default immediately 
+         boardImage = this.provideImage(boardImageInfo.DEFAULT_IMAGE_LOCATION); //board image is set to default immediately 
                                                                                //program runs.
           
          
@@ -35,7 +34,9 @@ public class DrawingBoard extends javax.swing.JPanel{
        java.awt.image.BufferedImage image  = null;
        try {
             image =  javax.imageio.ImageIO.read(new java.io.File(imageAbsolutePath));
-            this.boardImageType = getImageExtension(imageAbsolutePath);
+            boardImageInfo.imagePath = imageAbsolutePath;
+            boardImageInfo.boardImageType = getImageExtension(imageAbsolutePath);
+            boardImageInfo.imageFromWeb = false; //we set this to false because we know the image was gotten from a local directory, else this method wouldn't run. 
        } catch (java.io.IOException ex) {
            throw new RuntimeException("The image was not found. provideImage(String imagePath) method. drawingBoard.java\n"
                    + "Abort immediately!!! Program has crashed because the image was not retrieved.");

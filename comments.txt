@@ -3,4 +3,9 @@ Comments for Paint Project
 -The program allows a user to draw simple lines, as well as irregular shapes and marks on a picture in any color of their choosing.  
 -The program has added functionality, the most preeminent of which is giving a client the ability to use a select tool.  
 
+-The code needs to be changed so as to prompt the user to save their work if they haven't before exiting when they click the "X" button. 
+ When they exit through the Quit menu option, it asks them to save their work but it doesn't do so when one exits through the "X" button. 
+-It's possible for the user to change the default picture. This shouldn't be allowed. The program needs to be changed to prevent it. 
+
+
 For more information, please see release notes. 
