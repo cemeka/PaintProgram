@@ -158,7 +158,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
     }
 
     /* The methods used for editing the drawing board and handling files are below */
-    /**
+    /*
      * This method imitates Microsoft Paint, among other paint programs, in that
      * it creates a fresh platform for drawing
      */
