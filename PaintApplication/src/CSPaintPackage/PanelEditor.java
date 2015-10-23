@@ -1,5 +1,8 @@
 package CSPaintPackage;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 
 /**
  * A PanelEditor is the preeminent party responsible for making changes to an
@@ -161,8 +164,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
      */
     private void newFile() {
         this.askWhatToDoIfImageIsEdited();
-        String location = System.getProperty("user.dir") + "\\src\\CSPaintPackage\\";
-        drawingPanel.boardImage = drawingPanel.provideImage(location + "defaultImage.jpg");
+        drawingPanel.boardImage = drawingPanel.provideImage(drawingPanel.boardImageInfo.DEFAULT_IMAGE_LOCATION);
         this.imageCopy = duplicateImage(drawingPanel.boardImage); //this sets the image copy to the current new image
         imageEdited = false;
         drawingPanel.repaint();
@@ -200,29 +202,42 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
 
             imagePosition = javax.swing.JOptionPane.showInputDialog(guiToEdit.frame, "Please enter the URL of the file you wish to open", "Get Image from Web", javax.swing.JOptionPane.QUESTION_MESSAGE); //location of the image, that is, the image url
             if (imagePosition.length() > 300) {
-                throw new Error("You're URL is unusually long. It is not possible to retrieve its contents at this time");
+                throw new Error("You're URL is unusually long. It is not possible to retrieve its contents at this time"); //maybe change this code so that is shows message rather than throw an error. 
             }
 
             java.net.URL url = new java.net.URL(imagePosition);  //forming a new URL object with the online location of the image
             drawingPanel.boardImage = javax.imageio.ImageIO.read(url);
+            drawingPanel.boardImageInfo.imageFromWeb = true; 
             guiToEdit.frame.validate(); //this makes sure the changes are loaded
 
         } catch (Exception exc) { //this is an error message to be displayed if the image cannot be retrieved. 
             javax.swing.JOptionPane.showMessageDialog(guiToEdit.frame, "At this time, it is not possible to open and display a picture found at\n \"" + imagePosition + "\". This could "
                     + "be because the text you entered is not a URL\nor you do not have the appropriate permissions needed to access the file.", "Alert", javax.swing.JOptionPane.OK_OPTION);
-
             //a new drawing background is to be provided if a url cannot be retrieved. 
-            String location = System.getProperty("user.dir") + "\\src\\CSPaintPackage\\";
-             drawingPanel.boardImage = drawingPanel.provideImage(location + "defaultImage.jpg");
+            drawingPanel.boardImage = drawingPanel.provideImage(drawingPanel.boardImageInfo.DEFAULT_IMAGE_LOCATION);
         }
     }
 
-    /**
-     * SaveFile() is obsolete; SaveFileAs() and SaveImage() are responsible for
-     * saving image
-     */
+   
     private void saveFile() {
-        //does nothing. use "save file as" method to save image 
+        
+        if (drawingPanel.boardImageInfo.imageFromWeb == false){ //this tells us that the image wasn't gotten from the web. 
+            if (drawingPanel.boardImageInfo.DEFAULT_IMAGE_LOCATION.equals(drawingPanel.boardImageInfo.imagePath)){ 
+                //the user is trying to save to the default image, which isn't allowed. 
+                //give them the 'Save File As' option instead. 
+                saveFileAs();
+                //attempts were made to prevent user from saving to the default image. However, a bug exists because saveFileAs()
+                //still allows users to override the default image with a new file.
+                
+            }else{ //if the current path is the same path as that of the DEFAULT IMAGE, then we can't save a picture there.                                                                                                     //"the save file as" option will be called. 
+                saveImage(drawingPanel.boardImageInfo.imagePath);
+                this.imageEdited = false; //we set imageEdited to false because the image has been saved. 
+            }
+             
+        }else{
+              saveFileAs(); // We use "save file as" because this file was loaded directly from the Internet. 
+                           //There is no file path to it on the local machine yet. 
+        }
     }
 
     /*The method  below is very important. It is used to save the file. All other save methods call on this. 
@@ -231,16 +246,14 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
         java.io.File file = new java.io.File(imageAbsoluteStoragePath); //ideally this is supposed to 
         //be a directory
         try {
-            javax.imageio.ImageIO.write(drawingPanel.boardImage, drawingPanel.boardImageType, file);
+            javax.imageio.ImageIO.write(drawingPanel.boardImage, drawingPanel.boardImageInfo.boardImageType, file);
         } catch (java.io.IOException ex) {
             System.out.println("image could not be saved. drawingBoard.java");
         }
     }
 
     /**
-     * This method allows user to save a file to any path of their choosing. If
-     * an invalid file name is provided, a random name generator has been
-     * prepared and will supply a valid file name for the image
+     * This method allows user to save a file to any path of their choosing.
      */
     private void saveFileAs() {
 
@@ -250,9 +263,11 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
 
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) { 
             //the user must give a valid file name. The fileChooser ensures this. 
-            String fileName = fileChooser.getSelectedFile().getName() + "." + drawingPanel.boardImageType;
+            String fileName = fileChooser.getSelectedFile().getName() + "." + drawingPanel.boardImageInfo.boardImageType;
             saveImage(newFileLocation + fileName); //image file is saved here.
-            this.imageEdited = false; //since changes have been saved, we now say that the file has not been edited
+            this.imageEdited = false; //since changes have been saved, we now say that the file has not been edited   
+            drawingPanel.boardImage = drawingPanel.provideImage(newFileLocation + fileName); //Change to the image we just saved. the image previously on screen had intended modifications, but they weren't saved on that particular image. 
+                                                                                             //the image that is on screen after this method is actually an updated image with all changes saved.
             
         }
 
@@ -262,14 +277,16 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
      * This method allows a user to quit an application. The user is asked if
      * (s)he wants to save changes to image in the case that the image has been edited
      */
-    private void quit() { /*method replicated or might be referenced for main exit mechanism*/
-
+    private void quit() { //this method may be adjusted later so that it is  called by the main exiting mechanism i.e when we exit by clicking the "X" button. 
+                              
         if (imageEdited == false) {
             javax.swing.JOptionPane.showMessageDialog(guiToEdit.frame, "Thank you for using this program.");
             System.exit(0);
         } else if (imageEdited == true) {
             this.handleExitWhenFileNotSaved("Save work before exit?", "Paint");
         }
+        
+         
     }
 
     /**
@@ -559,6 +576,8 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
      This can be removed without any harm. It's the first line after the else if statement. This method asks client if (s)he wants
      to save work before exiting the application. It takes action based on user's response*/
 
+    
+    /**This is a recursive method that ensures the user consciously chooses to save or not to save their work before exiting**/
     private void handleExitWhenFileNotSaved(String message, String messageBoxTitle) {
         int response = javax.swing.JOptionPane.showConfirmDialog(guiToEdit.frame, message, messageBoxTitle, javax.swing.JOptionPane.YES_NO_OPTION);
         if (response == javax.swing.JOptionPane.NO_OPTION) {
@@ -566,7 +585,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
             System.exit(0);
         } else if (response == javax.swing.JOptionPane.YES_OPTION) {
             saveFileAs();
-            if (imageEdited == true){ //this means the image still hasn't still been saved
+            if (imageEdited == true){ //this means the image still hasn't still been saved. if the client had used saveFileAs() properly, imageEdited would be false. 
                                       //continue to call the handleExitWhenFileNotSaved method recursively until either (1) user saves the file or (2)user 
                                       //explicitly says they don't want to save the file. 
                handleExitWhenFileNotSaved(message, messageBoxTitle); 
