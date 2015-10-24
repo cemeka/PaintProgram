@@ -201,6 +201,9 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
         try {
 
             imagePosition = javax.swing.JOptionPane.showInputDialog(guiToEdit.frame, "Please enter the URL of the file you wish to open", "Get Image from Web", javax.swing.JOptionPane.QUESTION_MESSAGE); //location of the image, that is, the image url
+            if (imagePosition == null || imagePosition.trim().equals("")){
+                return; //we exit this method immediately if the image location given is "null" or is empty. The null option means that the user pressed the cancel option. 
+            }
             if (imagePosition.length() > 300) {
                 throw new Error("You're URL is unusually long. It is not possible to retrieve its contents at this time"); //maybe change this code so that is shows message rather than throw an error. 
             }
@@ -278,7 +281,8 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
      * This method allows a user to quit an application. The user is asked if
      * (s)he wants to save changes to image in the case that the image has been edited
      */
-    private void quit() { //this method may be adjusted later so that it is  called by the main exiting mechanism i.e when we exit by clicking the "X" button. 
+    public void quit() { //this method is  called by the main exiting mechanism i.e when we exit by clicking the "X" button.
+                         //this method is also called when a user tries to exit by clicking the Quit menu option. 
                               
         if (imageEdited == false) {
             javax.swing.JOptionPane.showMessageDialog(guiToEdit.frame, "Thank you for using this program.");

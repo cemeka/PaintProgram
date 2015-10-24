@@ -103,8 +103,12 @@ public class GUI {
       frame.getContentPane().add(menuBar, BorderLayout.NORTH);
       frame.setSize(600, 600);   //initial size set. The size of the frame can be modified at any point in time by the user. 
       frame.setTitle("Paint Program"); 
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setVisible(true); //this makes the frame visible
+
+      closeAppOperation(); //this method is called when the user tries to exit the app by pressing the close button 
+                          //This method is used in place of frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+  
+     frame.setVisible(true); //this makes the frame visible
   }
   
   /**finalizeComponents is where the other GUI methods are synthesized to form a useful product*/
@@ -137,6 +141,15 @@ public class GUI {
       frame.getContentPane().add(drawingBoard, BorderLayout.WEST); //the drawingBoard is added to the west portion of the frame. 
       
      
+  }
+  
+  public void closeAppOperation(){
+    frame.addWindowListener(new java.awt.event.WindowAdapter() {
+    @Override
+    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+       guiEditor.quit();
+    }
+});
   }
   
   
