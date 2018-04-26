@@ -1,5 +1,5 @@
 /**This is the main class. It has the main() method, which is where execution of the program starts.
- This class in itself does not do much. Its primary duty is to serve as a first point of entry for the Java Virtual Machine
+The GUI is launched here. 
  (JVM).*/
 
 package CSPaintPackage;
