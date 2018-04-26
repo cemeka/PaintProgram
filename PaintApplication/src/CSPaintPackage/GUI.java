@@ -1,5 +1,6 @@
-/**The GUI class is at the center of the Paint Application. It creates and assembles components of the User Interface; it registers the event generators with the appropriate listener
-   and serves as a platform through which a client can interact with the program.*/
+/**The GUI class is the View component of the Paint Application, following the Model View Controller (MVC design approach). 
+   It creates and assembles components of the user interface; it registers the event generators with the appropriate listeners;
+   and serves as a platform for a user to manipulate images.*/
 
 
 
