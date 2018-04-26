@@ -1,6 +1,6 @@
 /**This is the main class. It has the main() method, which is where execution of the program starts.
 The GUI is launched here. 
- (JVM).*/
+.*/
 
 package CSPaintPackage;
 
