@@ -5,10 +5,8 @@ import javax.swing.JOptionPane;
 
 
 /**
- * A PanelEditor is the preeminent party responsible for making changes to an
- * image. It is "the Editor" with the power to draw lines and crop images. It
- * also takes care of opening and saving images, among other things. It is an
- * essential part of the CSPaintPackage.
+ * The PanelEditor is  responsible for making changes to an
+ * image. It contains code that provides image editing functionality (such as cropping/changing background color). 
  */
 public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt.event.ActionListener{
 
@@ -18,13 +16,18 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
 
     private boolean imageEdited = false; //tells us whether the image in our panel has been edited.
     private String operationToPerform = "nothing"; //this string holds information about the task at hand. the default
-    //task is to do nothing when a user drags the mouse, until an operation has been specified by clicking one of the menu options. 
+    //task is to do nothing when a user drags the mouse, until an operation has been specified by clicking one of the menu options.
+    
     private java.awt.Cursor cursor;
+    
     private java.awt.Point beginPoint;
     private java.awt.Point currentPoint;
     private java.awt.Point endPoint;
+    
     private java.awt.image.BufferedImage croppedImage;
+    
     private int pictureLocation[] = new int[4]; //first two boxes contain image topmost x and y locations. next two contain image width and height respectively
+   
     private java.awt.image.BufferedImage originalImage;
     private java.awt.image.BufferedImage imageCopy;
     private java.awt.Color previousColor;
@@ -88,7 +91,7 @@ public class PanelEditor extends java.awt.event.MouseAdapter implements java.awt
      */
     private void handleEvent(String whatToDo) {
         whatToDo = whatToDo.toLowerCase();
-        /*Be very careful here. do NOT use capital letters here. everything used for comparison is in small letters*/
+      
         switch (whatToDo) {
             case "new file":
                 //create a new file
